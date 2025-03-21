@@ -3,13 +3,16 @@ from fastapi import FastAPI             # Framework para la API
 from pydantic import BaseModel          # Validación de datos entrantes
 import joblib                           # Para cargar el modelo entrenado
 import pandas as pd                     # Para convertir los datos entrantes en DataFrame
+import os
 
 # Instancia de la aplicación FastAPI
 app = FastAPI(title="API Predictiva para Monitoreo en Tiempo Real",
               description="API para predicción de fallas usando modelo XGBoost")
 
 # Carga del modelo previamente entrenado
-model = joblib.load("../models/modelo_xgboost.pkl")
+model_path = os.path.join(os.path.dirname(__file__), "..", "models", "modelo_xgboost.pkl")
+model = joblib.load(model_path)
+
 
 # Esquema de entrada de datos para validación automática (Pydantic)
 class DatosEntrada(BaseModel):
