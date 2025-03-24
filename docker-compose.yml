@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile.api
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/usr/src/app
+    env_file:
+      - .env
+    networks:
+      - monitoring_network
+
+  dashboard:
+    build:
+      context: .
+      dockerfile: Dockerfile.dashboard
+    ports:
+      - "8501:8501"
+    volumes:
+      - .:/usr/src/app
+    depends_on:
+      - api
+    networks:
+      - monitoring_network
+
+networks:
+  monitoring_network:
+    driver: bridge
