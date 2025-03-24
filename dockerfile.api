@@ -1,0 +1,20 @@
+# Imagen base oficial de Python
+FROM python:3.9-slim
+
+# Establecemos directorio de trabajo
+WORKDIR /usr/src/app
+
+# Instalación de dependencias
+COPY ./requirements.txt /usr/src/app/requirements.txt
+RUN pip install --upgrade pip
+RUN pip install -r requirements.txt
+
+# Copia del proyecto
+COPY ./app /usr/src/app/app
+COPY ./models /usr/src/app/models
+
+# Exponemos el puerto de la API
+EXPOSE 8000
+
+# Comando para iniciar API
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
