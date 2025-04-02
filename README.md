@@ -1,44 +1,30 @@
-# 🚨 Sistema Automatizado de Monitoreo Predictivo con Machine Learning en Tiempo Real
+Real-Time Predictive Monitoring
 
-## 📋 Descripción del Proyecto
-Este proyecto tiene como objetivo el desarrollo de un sistema predictivo capaz de identificar posibles fallos en equipos industriales en tiempo real, utilizando técnicas avanzadas de **Machine Learning** e integrando herramientas modernas como **FastAPI**, **Streamlit** y **Docker**.
+Este repositorio contiene un proyecto de monitoreo predictivo en tiempo real basado en Machine Learning. Incluye:
+- Pipelines de preprocesamiento de datos.
+- Modelo XGBoost entrenado para detectar fallas.
+- Despliegue de una API con FastAPI.
+- Dashboard interactivo con Streamlit.
+- Contenedorización con Docker.
+- Pruebas automatizadas y estructura modular profesional.
 
-El proyecto se enfoca en la predicción de fallos mediante el análisis de variables industriales clave como vibración, temperatura y presión.
+1. Descripción General
 
-> **Nota:** Este proyecto forma parte del portafolio de [Gonzalo Cisterna Salinas](https://github.com/GzoC) como parte de su formación en **Data Analytics**.
+Este proyecto tiene como objetivo identificar fallas en equipos industriales a partir de sensores que registran variables como temperatura, vibración y presión. El corazón de la solución es un **modelo de Machine Learning** (XGBoost) capaz de predecir en tiempo real la probabilidad de fallo.
 
----
-
-## 🎯 Características Principales
-✅ Monitoreo predictivo en tiempo real.  
-✅ API desarrollada en **FastAPI** para el consumo de predicciones.  
-✅ Dashboard interactivo usando **Streamlit** para visualizar datos y alertas.  
-✅ Entrenamiento de modelos avanzados como **Random Forest**, **XGBoost** y **LSTM**.  
-✅ Integración con **Docker** para un despliegue seguro y eficiente.  
-✅ Estructura modular para facilitar el mantenimiento y escalabilidad.  
+Se incluye una **API** con FastAPI para exponer el servicio de predicción y un **dashboard con Streamlit** para la visualización de resultados de manera amigable. Todo puede desplegarse fácilmente usando **Docker**.
 
 ---
 
-## ⚙️ Tecnologías Utilizadas
-- **Python 3.9**
-- **Pandas**, **NumPy** (Manejo y análisis de datos)
-- **Scikit-learn**, **XGBoost**, **LSTM** (Modelos de Machine Learning)
-- **FastAPI** (API en tiempo real)
-- **SQLite** o **PostgreSQL** (Almacenamiento de datos)
-- **Streamlit** o **Plotly Dash** (Dashboard interactivo)
-- **Docker** y **Docker Compose** (Despliegue y administración de contenedores)
-- **pytest** (Pruebas unitarias para asegurar la calidad del código)
+2. Estructura de Directorios
 
----
-
-## 📂 Estructura del Proyecto
-```
+```bash
 real_time_predictive_monitoring/
 │
 ├── data/
-│   ├── raw/                 # Datos originales capturados desde sensores
-│   ├── processed/           # Datos ya procesados y listos para entrenamiento
-│   └── database/            # Base de datos para almacenamiento y consulta
+│   ├── raw/              # Datos originales
+│   ├── processed/        # Datos procesados
+│   └── database/         # (Opcional) Archivos de base de datos
 │
 ├── notebooks/
 │   ├── 01_exploratory_data_analysis.ipynb
@@ -57,108 +43,133 @@ real_time_predictive_monitoring/
 │   └── utils.py
 │
 ├── app/
-│   └── app.py
+│   └── main.py           # Archivo principal de la API FastAPI
 │
-├── models/
-├── reports/
+├── models/               # Modelos guardados (XGBoost)
+├── reports/              # Informes, gráficas y métricas
 │   ├── figures/
 │   └── metrics/
-├── tests/
-│
+├── tests/                # Pruebas automatizadas
+│   ├── test_preprocessing.py
+│   ├── test_modeling.py
+│   ├── test_api.py
+│   ├── test_config.py
+│   ├── test_logger.py
+│   └── test_utils.py
+├── logs/                 # Archivos de logs
 ├── requirements.txt
 ├── .env
 ├── .gitignore
 ├── Dockerfile
 ├── docker-compose.yml
-└── README.md
-```
+└── README.md             # <-- Este documento
 
----
+Descripción de los Módulos en src/
+preprocessing.py: Funciones de carga, limpieza y preprocesamiento de datos.
 
-## 🖥️ Instalación y Configuración
-### 1️⃣ **Clonar el Repositorio**
-```bash
-git clone https://github.com/GzoC/real_time_predictive_monitoring_01.git
-cd real_time_predictive_monitoring_01
-```
+modeling.py: Entrenamiento, evaluación y guardado/carga del modelo XGBoost.
 
-### 2️⃣ **Crear y Activar el Entorno Virtual**
-```bash
-conda create -n monitoreo_predictivo python=3.9 -y
-conda activate monitoreo_predictivo
-```
+api.py: Lógica de predicción (carga de modelo, validación de datos) integrada con FastAPI.
 
-### 3️⃣ **Instalar las Dependencias**
-```bash
+dashboard.py: Interfaz de usuario con Streamlit para probar predicciones en tiempo real.
+
+config.py: Variables de configuración global (rutas, credenciales) cargadas desde .env.
+
+logger.py: Manejo de registros (logs) para seguimiento de eventos y errores.
+
+utils.py: Funciones auxiliares de validación, timestamps y divisores visuales.
+
+3. Configuración e Instalación
+3.1. Prerrequisitos
+Python 3.9 (o superior).
+
+Docker Desktop (opcional, pero recomendado).
+
+Git para clonar el repositorio.
+
+pip actualizado.
+
+3.2. Instalación de dependencias
+Clonar el repositorio:
+
+git clone https://github.com/GzoC/real_time_predictive_monitoring.git
+
+Entrar al directorio y crear un entorno virtual:
+cd real_time_predictive_monitoring
+python -m venv venv
+
+Activar el entorno virtual:
+En Windows:
+venv\Scripts\activate
+
+En Linux/Mac:
+source venv/bin/activate
+
+Instalar las dependencias:
+pip install --upgrade pip
 pip install -r requirements.txt
-```
 
-### 4️⃣ **Configurar el Archivo `.env`**
-1. Crea un archivo `.env` en la raíz del proyecto.
-2. Agrega las siguientes variables de entorno:
-```env
-DB_HOST=localhost
-DB_PORT=5432
-DB_USER=admin
-DB_PASSWORD=tu_contraseña_segura
-DB_NAME=mi_base_de_datos
-API_KEY=tu_api_key_aqui
-ENV=development
-DEBUG=True
-```
+Nota: En caso de usar Docker, no es obligatorio crear un entorno virtual local. Sin embargo, te servirá para ejecutar y probar en modo desarrollo.
 
-### 5️⃣ **Ejecutar la Aplicación**
-Para levantar la API localmente:
-```bash
-uvicorn app.app:app --reload
-```
+4. Uso de la Aplicación
+4.1. Ejecución Local
+API:
 
-Para visualizar el dashboard interactivo:
-```bash
+Para lanzar la API en local, edita app/main.py si deseas cambiar algún puerto.
+
+Ejecuta:
+uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+Accede a http://localhost:8000 para ver la respuesta inicial.
+Documentación interactiva disponible en http://localhost:8000/docs.
+
+Dashboard (Streamlit):
+
+Ejecuta desde la raíz del proyecto (o dentro de src/):
 streamlit run src/dashboard.py
-```
+Accede a http://localhost:8501.
 
-### 6️⃣ **Despliegue con Docker (Recomendado para Producción)**
-```bash
-docker-compose up
-```
+4.2. Ejecución con Docker Compose
 
----
+Construir y lanzar contenedores:
+docker-compose up --build
 
-## 🚀 Uso de la API
-La API proporciona los siguientes endpoints clave:
+Verifica:
 
-| **Método** | **Ruta**            | **Descripción**                      |
-|--------------|----------------------|----------------------------------------|
-| `POST`        | `/predict`            | Recibe datos y devuelve una predicción |
-| `GET`         | `/status`             | Verifica el estado del sistema         |
+La API en http://localhost:8000.
+El Dashboard en http://localhost:8501.
 
-Ejemplo de request para el endpoint `/predict`:
-```json
-{
-  "vibration": 2.5,
-  "temperature": 75.0,
-  "pressure": 1.2
-}
-```
+5. Notebooks de Desarrollo
+01_exploratory_data_analysis.ipynb: Análisis inicial de datos (EDA).
 
----
+02_data_preprocessing.ipynb: Preprocesamiento y limpieza.
 
-## 🔧 Pruebas
-Para ejecutar las pruebas unitarias, utiliza el siguiente comando:
-```bash
+03_model_training_evaluation.ipynb: Entrenamiento y evaluación del modelo.
+
+04_model_deployment.ipynb: Despliegue con FastAPI y Streamlit.
+
+05_api_testing.ipynb: Pruebas de la API y métricas de rendimiento.
+
+**Todos los notebooks se refactorizaron para usar módulos en la carpeta src/, facilitando la mantenibilidad y buenas prácticas.
+
+6. Pruebas Automatizadas
+En la carpeta tests/ se incluyen scripts de prueba unitarias e integradas para cada módulo (preprocessing, modeling, api, config, logger, utils). Se pueden ejecutar con:
+
 pytest tests/
-```
 
----
+Algunas pruebas requieren la API en ejecución, otras se basan en el modelo entrenado. Asegúrate de haber entrenado o cargado el modelo XGBoost antes de iniciar las pruebas.
 
-## 🧑‍💻 Autor
-👨‍💻 **Gonzalo Cisterna Salinas**  
-📧 [cisternasalinasg@gmail.com](mailto:cisternasalinasg@gmail.com)  
-🌐 [GitHub - GzoC](https://github.com/GzoC)
+7. Buenas Prácticas y Consejos
+Control de versiones: Mantén ramas separadas para nuevas funcionalidades y mergea a main tras aprobar y testear.
 
----
+Documentación: Actualiza este README y docstrings en cada script (src/) con información clara.
 
-## 📜 Licencia
-Este proyecto está bajo la licencia **MIT**, lo que permite su libre uso, modificación y distribución. Consulta el archivo `LICENSE` para más detalles.
+Entorno Docker: Facilita la replicación exacta de la aplicación en cualquier sistema operativo.
+
+8. Licencia
+Este proyecto se distribuye bajo la licencia MIT, lo que te permite usar, modificar y distribuir libremente el código siempre y cuando incluyas la nota de licencia correspondiente.
+
+9. Autor
+Gonzalo A. Cisterna Salinas/cisternasalinasg@gmail.com
+
+¡Gracias por interesarte en este proyecto!
 

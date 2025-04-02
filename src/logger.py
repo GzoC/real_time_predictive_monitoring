@@ -5,12 +5,12 @@ import os                              # Para manejo de rutas
 from datetime import datetime          # Para registrar fecha y hora
 
 # Crear carpeta de logs si no existe
-LOG_DIR = os.path.join(os.path.dirname(__file__), "..", "logs")
+LOG_DIR = os.path.join(os.path.dirname(__file__), "..", "logs")  
 os.makedirs(LOG_DIR, exist_ok=True)
 
 # Nombre dinámico del archivo de log con fecha
 log_filename = f"app_{datetime.now().strftime('%Y-%m-%d')}.log"
-log_path = os.path.join(LOG_DIR, log_filename)
+log_path = os.path.join(LOG_DIR, log_filename) # Ruta completa del archivo de log
 
 # Configuración básica del logger
 logging.basicConfig(
