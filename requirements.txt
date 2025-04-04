@@ -1,13 +1,32 @@
-fastapi
-uvicorn
-pydantic
-pandas
-numpy
-xgboost
-streamlit
-requests
-joblib
-seaborn
-matplotlib
-scikit-learn
-python-dotenv
+# Core
+pandas>=1.5
+numpy>=1.23
+scikit-learn>=1.1
+xgboost>=1.7
+joblib>=1.2
+
+# Visualización
+matplotlib>=3.6
+seaborn>=0.12
+
+# API
+fastapi>=0.95
+uvicorn[standard]>=0.22
+
+# Dashboard
+streamlit>=1.20
+
+# Utilidades
+python-dotenv>=1.0
+loguru>=0.7
+
+# Testing
+pytest>=7.2
+
+# (Opcional) Si usas Jupyter Notebooks
+notebook>=6.5
+ipykernel>=6.21
+
+# (Opcional) Formateo de código y estilo
+black>=23.1
+ruff>=0.3
