@@ -29,3 +29,6 @@ def test_mostrar_divisor(capfd):
     mostrar_divisor("Test")
     out, err = capfd.readouterr()
     assert "Test" in out
+
+
+# tests/test_utils.py
