@@ -1,0 +1,228 @@
+{
+  "task": "current_condition_classification",
+  "future_horizon": null,
+  "dataset": {
+    "name": "AI4I 2020",
+    "doi": "10.24432/C5HS5C",
+    "synthetic": true,
+    "sha256": "dc6630cd9b1f0f853922fad78a1b6436570d3f1ec863f1dd5c4340ac56bc8a8e",
+    "rows": 10000
+  },
+  "schema_version": 1,
+  "features": [
+    "product_type",
+    "air_temperature_k",
+    "process_temperature_k",
+    "rotational_speed_rpm",
+    "torque_nm",
+    "tool_wear_min"
+  ],
+  "excluded": [
+    "UDI",
+    "Product ID",
+    "Machine failure",
+    "TWF",
+    "HDF",
+    "PWF",
+    "OSF",
+    "RNF"
+  ],
+  "split": "First 60% train, next 20% validation, last 20% test in published UDI order; no actual timestamps or asset groups available.",
+  "partitions": {
+    "train": {
+      "rows": 6000,
+      "positives": 255,
+      "udi_first": 1,
+      "udi_last": 6000
+    },
+    "validation": {
+      "rows": 2000,
+      "positives": 45,
+      "udi_first": 6001,
+      "udi_last": 8000
+    },
+    "test": {
+      "rows": 2000,
+      "positives": 39,
+      "udi_first": 8001,
+      "udi_last": 10000
+    }
+  },
+  "threshold_selection": "Maximum validation F2 on 0.05..0.95, step 0.05; no test tuning",
+  "threshold": 0.44999999999999996,
+  "versions": {
+    "python": "3.12.13",
+    "sklearn": "1.9.1",
+    "numpy": "2.5.4",
+    "pandas": "2.3.3"
+  },
+  "training_range": {
+    "air_temperature_k": {
+      "min": 295.3,
+      "max": 304.5
+    },
+    "process_temperature_k": {
+      "min": 305.7,
+      "max": 313.8
+    },
+    "rotational_speed_rpm": {
+      "min": 1168.0,
+      "max": 2886.0
+    },
+    "torque_nm": {
+      "min": 3.8,
+      "max": 76.2
+    },
+    "tool_wear_min": {
+      "min": 0.0,
+      "max": 253.0
+    }
+  },
+  "evaluation": {
+    "validation": {
+      "gradient_boosting": {
+        "samples": 2000,
+        "positives": 45,
+        "threshold": 0.44999999999999996,
+        "confusion_matrix": [
+          [
+            1954,
+            1
+          ],
+          [
+            12,
+            33
+          ]
+        ],
+        "precision": 0.9705882352941176,
+        "recall": 0.7333333333333333,
+        "f2": 0.7710280373831776,
+        "false_alarm_rate": 0.0005115089514066496,
+        "miss_rate": 0.26666666666666666,
+        "average_precision": 0.8777951629739056,
+        "roc_auc": 0.9783972719522591
+      },
+      "depth_3_rules": {
+        "samples": 2000,
+        "positives": 45,
+        "threshold": 0.65,
+        "confusion_matrix": [
+          [
+            1849,
+            106
+          ],
+          [
+            16,
+            29
+          ]
+        ],
+        "precision": 0.21481481481481482,
+        "recall": 0.6444444444444445,
+        "f2": 0.4603174603174603,
+        "false_alarm_rate": 0.05421994884910486,
+        "miss_rate": 0.35555555555555557,
+        "average_precision": 0.4390997038180501,
+        "roc_auc": 0.9058596192100027
+      },
+      "always_normal": {
+        "samples": 2000,
+        "positives": 45,
+        "threshold": 0.5,
+        "confusion_matrix": [
+          [
+            1955,
+            0
+          ],
+          [
+            45,
+            0
+          ]
+        ],
+        "precision": 0.0,
+        "recall": 0.0,
+        "f2": 0.0,
+        "false_alarm_rate": 0.0,
+        "miss_rate": 1.0,
+        "average_precision": 0.0225,
+        "roc_auc": 0.5
+      }
+    },
+    "test": {
+      "gradient_boosting": {
+        "samples": 2000,
+        "positives": 39,
+        "threshold": 0.44999999999999996,
+        "confusion_matrix": [
+          [
+            1959,
+            2
+          ],
+          [
+            11,
+            28
+          ]
+        ],
+        "precision": 0.9333333333333333,
+        "recall": 0.717948717948718,
+        "f2": 0.7526881720430108,
+        "false_alarm_rate": 0.0010198878123406426,
+        "miss_rate": 0.28205128205128205,
+        "average_precision": 0.8199247158488008,
+        "roc_auc": 0.9687561291334876
+      },
+      "depth_3_rules": {
+        "samples": 2000,
+        "positives": 39,
+        "threshold": 0.65,
+        "confusion_matrix": [
+          [
+            1870,
+            91
+          ],
+          [
+            10,
+            29
+          ]
+        ],
+        "precision": 0.24166666666666667,
+        "recall": 0.7435897435897436,
+        "f2": 0.5253623188405797,
+        "false_alarm_rate": 0.046404895461499236,
+        "miss_rate": 0.2564102564102564,
+        "average_precision": 0.37943556588111865,
+        "roc_auc": 0.9123419500777991
+      },
+      "always_normal": {
+        "samples": 2000,
+        "positives": 39,
+        "threshold": 0.5,
+        "confusion_matrix": [
+          [
+            1961,
+            0
+          ],
+          [
+            39,
+            0
+          ]
+        ],
+        "precision": 0.0,
+        "recall": 0.0,
+        "f2": 0.0,
+        "false_alarm_rate": 0.0,
+        "miss_rate": 1.0,
+        "average_precision": 0.0195,
+        "roc_auc": 0.5
+      }
+    }
+  },
+  "latency": {
+    "scope": "Single-row pipeline.predict_proba only; excludes HTTP, storage and UI",
+    "repetitions": 100,
+    "median_ms": 5.8315999995102175,
+    "p95_ms": 9.886930006905459,
+    "platform": "Windows-10-10.0.19045-SP0"
+  },
+  "artifact_sha256": "59d8b050c20f05143491336da654081de1a7a58e47ca1659630688a803264bf8",
+  "model_id": "59d8b050c20f0514"
+}

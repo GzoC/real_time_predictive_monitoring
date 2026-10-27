@@ -1,0 +1,20 @@
+Thresholds below are in standardized feature units; pipeline applies the training scaler.
+|--- rotational_speed_rpm <= -0.84
+|   |--- temperature_gap_k <= -0.99
+|   |   |--- temperature_gap_k <= -1.10
+|   |   |   |--- class: 1
+|   |   |--- temperature_gap_k >  -1.10
+|   |   |   |--- class: 1
+|   |--- temperature_gap_k >  -0.99
+|   |   |--- wear_torque_min_nm <= 2.33
+|   |   |   |--- class: 0
+|   |   |--- wear_torque_min_nm >  2.33
+|   |   |   |--- class: 1
+|--- rotational_speed_rpm >  -0.84
+|   |--- power_w <= -2.57
+|   |   |--- class: 1
+|   |--- power_w >  -2.57
+|   |   |--- tool_wear_min <= 1.45
+|   |   |   |--- class: 0
+|   |   |--- tool_wear_min >  1.45
+|   |   |   |--- class: 1

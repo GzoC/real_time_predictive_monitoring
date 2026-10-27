@@ -172,3 +172,5 @@ cython_debug/
 
 #notas de avance
 notas.txt
+var/
+.ruff_cache/

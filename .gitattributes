@@ -1,0 +1,9 @@
+* text=auto
+*.py text eol=lf
+*.md text eol=lf
+*.toml text eol=lf
+*.yml text eol=lf
+*.csv text eol=lf
+data/raw/*.csv -text whitespace=trailing-space,space-before-tab,cr-at-eol
+*.png binary
+*.mp4 binary

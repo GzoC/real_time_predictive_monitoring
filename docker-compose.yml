@@ -1,33 +1,37 @@
-version: '3.8'
-
 services:
-
   api:
-    build:
-      context: .
-      dockerfile: Dockerfile.api
-    ports:
-      - "8000:8000"
-    volumes:
-      - .:/usr/src/app
-    env_file:
-      - .env
-    networks:
-      - monitoring_network
-
+    build: .
+    image: condition-monitor:local
+    ports: ["127.0.0.1:8000:8000"]
+    volumes: ["telemetry:/data"]
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health', timeout=3)"]
+      interval: 5s
+      timeout: 4s
+      retries: 12
+      start_period: 15s
   dashboard:
-    build:
-      context: .
-      dockerfile: Dockerfile.dashboard
-    ports:
-      - "8501:8501"
-    volumes:
-      - .:/usr/src/app
+    build: .
+    image: condition-monitor:local
+    command: ["python", "-m", "streamlit", "run", "/app/src/predictive_monitor/dashboard.py", "--server.address=0.0.0.0", "--browser.gatherUsageStats=false"]
+    environment:
+      API_URL: http://api:8000
+    ports: ["127.0.0.1:8501:8501"]
     depends_on:
-      - api
-    networks:
-      - monitoring_network
-
-networks:
-  monitoring_network:
-    driver: bridge
+      api:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8501/_stcore/health', timeout=3)"]
+      interval: 5s
+      timeout: 4s
+      retries: 12
+  simulator:
+    profiles: ["demo"]
+    build: .
+    image: condition-monitor:local
+    command: ["condition-monitor", "simulate", "--api", "http://api:8000", "--steps", "120"]
+    depends_on:
+      api:
+        condition: service_healthy
+volumes:
+  telemetry:
