@@ -1,0 +1,61 @@
+name: Quality and reproducibility
+on:
+  push:
+    branches: [main, 'codex/**']
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: quality-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  python:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python: ['3.11', '3.13']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          version: '0.11.19'
+          python-version: ${{ matrix.python }}
+      - run: uv sync --locked --extra dev
+      - run: uv run --no-sync ruff check src tests scripts
+      - run: uv run --no-sync ruff format --check src tests scripts
+      - run: uv run --no-sync pytest --cov=predictive_monitor --cov-report=term-missing
+      - run: uv run --no-sync condition-monitor train
+      - run: uv run --no-sync python scripts/check_notebook.py
+      - run: uv build
+      - name: Install and run wheel outside source tree
+        run: |
+          uv venv /tmp/condition-wheel
+          uv pip install --python /tmp/condition-wheel/bin/python --require-hashes -r requirements.txt
+          uv pip install --python /tmp/condition-wheel/bin/python --no-deps dist/*.whl
+          cd /tmp
+          /tmp/condition-wheel/bin/condition-monitor train --data "$GITHUB_WORKSPACE/data/raw/ai4i2020.csv" --output wheel-model
+      - uses: actions/upload-artifact@v4
+        if: matrix.python == '3.13'
+        with:
+          name: model-evaluation-and-package
+          path: |
+            var/model/manifest.json
+            var/model/baseline-rules.txt
+            dist/*
+  container:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: docker compose config --quiet
+      - run: docker compose up --build -d --wait
+      - name: Ingest real HTTP telemetry from simulator container
+        run: |
+          docker compose run --rm simulator condition-monitor simulate --api http://api:8000 --steps 5 --interval 0.1 --scenario alarm
+          python scripts/container_smoke.py
+      - name: Container logs
+        if: always()
+        run: docker compose logs --no-color
+      - name: Clean CI data
+        if: always()
+        run: docker compose --profile demo down --volumes

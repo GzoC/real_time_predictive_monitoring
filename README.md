@@ -1,175 +1,87 @@
-Real-Time Predictive Monitoring
+# Industrial Condition Monitor
 
-Este repositorio contiene un proyecto de monitoreo predictivo en tiempo real basado en Machine Learning. Incluye:
-- Pipelines de preprocesamiento de datos.
-- Modelo XGBoost entrenado para detectar fallas.
-- Despliegue de una API con FastAPI.
-- Dashboard interactivo con Streamlit.
-- Contenedorización con Docker.
-- Pruebas automatizadas y estructura modular profesional.
+**De una medición física a una clasificación trazable: modelo, telemetría y calidad de señal.**
 
-1. Descripción General
+Python · scikit-learn · FastAPI · Streamlit · SQLite
 
-Este proyecto tiene como objetivo identificar fallas en equipos industriales a partir de sensores que registran variables como temperatura, vibración y presión. El corazón de la solución es un **modelo de Machine Learning** (XGBoost) capaz de predecir en tiempo real la probabilidad de fallo.
+Demostrador de clasificación de condición industrial con datos sintéticos AI4I 2020. El modelo detecta la condición de la observación; no se atribuye anticipación de fallas futuras. El nombre histórico del repositorio se conserva.
 
-Se incluye una **API** con FastAPI para exponer el servicio de predicción y un **dashboard con Streamlit** para la visualización de resultados de manera amigable. Todo puede desplegarse fácilmente usando **Docker**.
+**Estado:** reconstrucción en curso; ver [comprobaciones y pendientes](docs/IMPLEMENTATION_STATUS.md).
 
----
+## Ejecutar localmente
 
-2. Estructura de Directorios
+Con Python 3.11–3.14 y uv:
 
 ```bash
-real_time_predictive_monitoring/
-│
-├── data/
-│   ├── raw/              # Datos originales
-│   ├── processed/        # Datos procesados
-│   └── database/         # (Opcional) Archivos de base de datos
-│
-├── notebooks/
-│   ├── 01_exploratory_data_analysis.ipynb
-│   ├── 02_data_preprocessing.ipynb
-│   ├── 03_model_training_evaluation.ipynb
-│   ├── 04_model_deployment.ipynb
-│   └── 05_api_testing.ipynb
-│
-├── src/
-│   ├── preprocessing.py
-│   ├── modeling.py
-│   ├── api.py
-│   ├── dashboard.py
-│   ├── config.py
-│   ├── logger.py
-│   └── utils.py
-│
-├── app/
-│   └── main.py           # Archivo principal de la API FastAPI
-│
-├── models/               # Modelos guardados (XGBoost)
-├── reports/              # Informes, gráficas y métricas
-│   ├── figures/
-│   └── metrics/
-├── tests/                # Pruebas automatizadas
-│   ├── test_preprocessing.py
-│   ├── test_modeling.py
-│   ├── test_api.py
-│   ├── test_config.py
-│   ├── test_logger.py
-│   └── test_utils.py
-├── logs/                 # Archivos de logs
-├── requirements.txt
-├── .env
-├── .gitignore
-├── Dockerfile
-├── docker-compose.yml
-└── README.md             # <-- Este documento
-
-Descripción de los Módulos en src/
-preprocessing.py: Funciones de carga, limpieza y preprocesamiento de datos.
-
-modeling.py: Entrenamiento, evaluación y guardado/carga del modelo XGBoost.
-
-api.py: Lógica de predicción (carga de modelo, validación de datos) integrada con FastAPI.
-
-dashboard.py: Interfaz de usuario con Streamlit para probar predicciones en tiempo real.
-
-config.py: Variables de configuración global (rutas, credenciales) cargadas desde .env.
-
-logger.py: Manejo de registros (logs) para seguimiento de eventos y errores.
-
-utils.py: Funciones auxiliares de validación, timestamps y divisores visuales.
-
-3. Configuración e Instalación
-3.1. Prerrequisitos
-Python 3.9 (o superior).
-
-Docker Desktop (opcional, pero recomendado).
-
-Git para clonar el repositorio.
-
-pip actualizado.
-
-3.2. Instalación de dependencias
-Clonar el repositorio:
-
 git clone https://github.com/GzoC/real_time_predictive_monitoring.git
-
-Entrar al directorio y crear un entorno virtual:
 cd real_time_predictive_monitoring
-python -m venv venv
+git switch codex/predictive-monitoring-rebuild
+uv sync --locked --extra dev
+uv run --no-sync condition-monitor train
+uv run --no-sync condition-monitor serve
+```
 
-Activar el entorno virtual:
-En Windows:
-venv\Scripts\activate
+En otra terminal del mismo directorio:
 
-En Linux/Mac:
-source venv/bin/activate
+```bash
+uv run --no-sync condition-monitor dashboard
+```
 
-Instalar las dependencias:
-pip install --upgrade pip
-pip install -r requirements.txt
+Abre http://127.0.0.1:8501. Inicia un ciclo de datos desde una tercera terminal:
 
-Nota: En caso de usar Docker, no es obligatorio crear un entorno virtual local. Sin embargo, te servirá para ejecutar y probar en modo desarrollo.
+```bash
+uv run --no-sync condition-monitor simulate --steps 80
+```
 
-4. Uso de la Aplicación
-4.1. Ejecución Local
-API:
+El ciclo incluye operación normal, condición de alarma, nueve segundos de ausencia de señal y recuperación. Los valores son reproducibles; los timestamps corresponden al instante de envío. Detén los servicios con Ctrl+C. API interactiva: http://127.0.0.1:8000/docs.
 
-Para lanzar la API en local, edita app/main.py si deseas cambiar algún puerto.
+## Qué demuestra
 
-Ejecuta:
-uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
-Accede a http://localhost:8000 para ver la respuesta inicial.
-Documentación interactiva disponible en http://localhost:8000/docs.
+- Un único pipeline guarda las transformaciones y el clasificador. CLI, notebook y API reciben las mismas unidades y características.
+- El umbral se elige en validación; el conjunto de prueba permanece reservado. Las etiquetas de tipos de fallo y los identificadores no entran al modelo.
+- Cada evento conserva su activo, hora UTC, origen declarado, puntuación y versión del modelo. Los reenvíos no duplican una medición retenida.
+- La pérdida de señal produce estado desconocido. El dashboard muestra la antigüedad, las alarmas y los valores fuera del rango de entrenamiento.
+- Dependencias bloqueadas, paquete instalable y configuración Docker que instala el código sin montajes del checkout.
 
-Dashboard (Streamlit):
+## Resultado medido
 
-Ejecuta desde la raíz del proyecto (o dentro de src/):
-streamlit run src/dashboard.py
-Accede a http://localhost:8501.
+Holdout de 2.000 observaciones con 39 fallos:
 
-4.2. Ejecución con Docker Compose
+| Método | Fallos detectados | Fallos omitidos | Falsas alarmas |
+|---|---:|---:|---:|
+| Gradient Boosting | 28 | 11 | 2 |
+| Reglas de profundidad 3 | 29 | 10 | 91 |
+| Siempre normal | 0 | 39 | 0 |
 
-Construir y lanzar contenedores:
-docker-compose up --build
+La mejora consiste en menos falsas alarmas con una detección ligeramente menor que las reglas. El modelo omite 11 fallos y no está validado para decidir mantenimiento industrial. [Datos y atribución](data/README.md) · [Modelo y limitaciones](docs/MODEL_CARD.md) · [Resultado completo](reports/metrics/evaluation.json).
 
-Verifica:
+## Contenedores
 
-La API en http://localhost:8000.
-El Dashboard en http://localhost:8501.
+```bash
+docker compose --profile demo up --build -d --wait
+```
 
-5. Notebooks de Desarrollo
-01_exploratory_data_analysis.ipynb: Análisis inicial de datos (EDA).
+API en 8000, dashboard en 8501, ambos publicados solo en loopback. El simulador termina después de 120 mediciones de reloj; las fases sin señal no envían eventos. Para repetir: `docker compose run --rm simulator`. El dashboard usa el nombre de servicio `api`, no localhost, para comunicarse dentro de Compose. La validación de contenedores está pendiente hasta que la CI lo confirme.
 
-02_data_preprocessing.ipynb: Preprocesamiento y limpieza.
+## Reproducir la evaluación
 
-03_model_training_evaluation.ipynb: Entrenamiento y evaluación del modelo.
+```bash
+uv run --no-sync pytest --cov=predictive_monitor --cov-report=term-missing
+uv run --no-sync ruff check src tests scripts
+uv run --no-sync python scripts/check_notebook.py
+uv build
+```
 
-04_model_deployment.ipynb: Despliegue con FastAPI y Streamlit.
+El entrenamiento genera `var/model/pipeline.joblib`, un manifiesto JSON con hash de datos, versiones y métricas, y las reglas de referencia. Solo se cargan artefactos locales confiables. La comprobación de checksum detecta corrupción; no autentica modelos de terceros. Tras volver a entrenar, reinicia la API para usar el nuevo modelo.
 
-05_api_testing.ipynb: Pruebas de la API y métricas de rendimiento.
+## Documentación
 
-**Todos los notebooks se refactorizaron para usar módulos en la carpeta src/, facilitando la mantenibilidad y buenas prácticas.
+- [Contrato, unidades y estados HTTP](docs/CONTRACT.md)
+- [Procedencia y licencia de datos](data/README.md)
+- [Modelo, evaluación y límites](docs/MODEL_CARD.md)
+- [Migración e historial preservado](docs/MIGRATION.md)
+- [Estado de validación](docs/IMPLEMENTATION_STATUS.md)
 
-6. Pruebas Automatizadas
-En la carpeta tests/ se incluyen scripts de prueba unitarias e integradas para cada módulo (preprocessing, modeling, api, config, logger, utils). Se pueden ejecutar con:
+English: Reproducible industrial current-condition classification with a persisted preprocessing pipeline, held-out evaluation and a live synthetic telemetry demonstration. No future failure horizon or factory deployment is claimed.
 
-pytest tests/
-
-Algunas pruebas requieren la API en ejecución, otras se basan en el modelo entrenado. Asegúrate de haber entrenado o cargado el modelo XGBoost antes de iniciar las pruebas.
-
-7. Buenas Prácticas y Consejos
-Control de versiones: Mantén ramas separadas para nuevas funcionalidades y mergea a main tras aprobar y testear.
-
-Documentación: Actualiza este README y docstrings en cada script (src/) con información clara.
-
-Entorno Docker: Facilita la replicación exacta de la aplicación en cualquier sistema operativo.
-
-8. Licencia
-Este proyecto se distribuye bajo la licencia MIT, lo que te permite usar, modificar y distribuir libremente el código siempre y cuando incluyas la nota de licencia correspondiente.
-
-9. Autor
-Gonzalo A. Cisterna Salinas/cisternasalinasg@gmail.com
-
-¡Gracias por interesarte en este proyecto!
-
+Autor: [GzoC](https://github.com/GzoC). Código MIT. Dataset AI4I 2020 / UCI: CC BY 4.0, atribución en data/README.md.
