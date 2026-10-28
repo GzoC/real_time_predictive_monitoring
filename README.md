@@ -81,6 +81,8 @@ El entrenamiento genera `var/model/pipeline.joblib`, un manifiesto JSON con hash
 
 ## Documentación
 
+La investigación de [`predictive_maintenance_01`](https://github.com/GzoC/predictive_maintenance_01) se conserva como [estudio de fuga de información y reevaluación](docs/research/LEGACY_MAINTENANCE.md). El 100 % histórico dependía de un diagnóstico que reproducía la etiqueta; la reevaluación sin esa columna no acredita capacidad útil de anticipación.
+
 - [Contrato, unidades y estados HTTP](docs/CONTRACT.md)
 - [Procedencia y licencia de datos](data/README.md)
 - [Modelo, evaluación y límites](docs/MODEL_CARD.md)

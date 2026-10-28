@@ -1,0 +1,168 @@
+{
+  "scope": "Forensic label classification on unverified legacy data; no future horizon or plant validation",
+  "source": {
+    "repository": "GzoC/predictive_maintenance_01",
+    "commit": "c69f8024fd1f014f7f2de591f5594cc21b14a69d",
+    "sha256": "a44c2233ed82dd3eb07aa6bf6f35e5fb6ec13be78ea52023bb51e6e0346d061d",
+    "hash_scope": "CSV bytes with CRLF converted to LF for Git checkout portability; values unchanged",
+    "file_bytes_sha256": "53ec5f5a03985bf0ba1d8fa8c50916bc118dcf9e8c9d3e3bc83ffc25291f0ea8",
+    "provenance": "unknown",
+    "data_license": "unverified",
+    "rows": 10000
+  },
+  "environment": {
+    "python": "3.12.13",
+    "sklearn": "1.9.1"
+  },
+  "leakage": {
+    "rule": "failure_type != No Failure",
+    "matches": 10000,
+    "fraction": 1.0,
+    "cross_tab": {
+      "0": {
+        "Humidity Fault": 0,
+        "No Failure": 8474,
+        "Overheat": 0,
+        "Pressure Fault": 0,
+        "Vibration Fault": 0
+      },
+      "1": {
+        "Humidity Fault": 290,
+        "No Failure": 0,
+        "Overheat": 517,
+        "Pressure Fault": 408,
+        "Vibration Fault": 311
+      }
+    }
+  },
+  "features": [
+    "operating_hours",
+    "temperature",
+    "vibration",
+    "pressure",
+    "humidity"
+  ],
+  "excluded": [
+    "machine_id",
+    "failure_type",
+    "maintenance_required"
+  ],
+  "split": {
+    "method": "random stratified 60/20/20, seed42; not temporal or grouped",
+    "train": {
+      "rows": 6000,
+      "positives": 916,
+      "indices_sha256": "be0f864979fcf55cee275138909644c78acdbb3c850f18fd86a9c643cbba0dcd"
+    },
+    "validation": {
+      "rows": 2000,
+      "positives": 305,
+      "indices_sha256": "cbf64d48dbe3aecc3c9648153c13af6a03887e2a6e5d9bcf77e5695a305a27b1"
+    },
+    "test": {
+      "rows": 2000,
+      "positives": 305,
+      "indices_sha256": "4150aa40656c725e8c12bb0a83e7d33c0f2d35588441d6bd7d92772eb515ad6d"
+    }
+  },
+  "selection": "Fixed models; threshold maximizes validation F2 on 0.05..0.95 grid. No test tuning.",
+  "cost": "Illustration only: FP=1, FN=10 arbitrary units, not measured plant costs; not used for fitting or selection",
+  "test": {
+    "logistic_regression": {
+      "samples": 2000,
+      "positives": 305,
+      "threshold": 0.1,
+      "confusion_matrix": [
+        [
+          0,
+          1695
+        ],
+        [
+          0,
+          305
+        ]
+      ],
+      "precision": 0.1525,
+      "recall": 1.0,
+      "f2": 0.47360248447204967,
+      "false_alarm_rate": 1.0,
+      "miss_rate": 0.0,
+      "average_precision": 0.15028837351553526,
+      "roc_auc": 0.5077266792398085,
+      "illustrative_cost_fp1_fn10": 1695,
+      "accuracy": 0.1525
+    },
+    "gradient_boosting": {
+      "samples": 2000,
+      "positives": 305,
+      "threshold": 0.05,
+      "confusion_matrix": [
+        [
+          1,
+          1694
+        ],
+        [
+          0,
+          305
+        ]
+      ],
+      "precision": 0.15257628814407204,
+      "recall": 1.0,
+      "f2": 0.47374961168064617,
+      "false_alarm_rate": 0.9994100294985251,
+      "miss_rate": 0.0,
+      "average_precision": 0.1444144202916398,
+      "roc_auc": 0.4714299530925093,
+      "illustrative_cost_fp1_fn10": 1694,
+      "accuracy": 0.153
+    },
+    "always_normal": {
+      "samples": 2000,
+      "positives": 305,
+      "threshold": 0.5,
+      "confusion_matrix": [
+        [
+          1695,
+          0
+        ],
+        [
+          305,
+          0
+        ]
+      ],
+      "precision": 0.0,
+      "recall": 0.0,
+      "f2": 0.0,
+      "false_alarm_rate": 0.0,
+      "miss_rate": 1.0,
+      "average_precision": 0.1525,
+      "roc_auc": 0.5,
+      "illustrative_cost_fp1_fn10": 3050,
+      "accuracy": 0.8475
+    },
+    "always_alarm": {
+      "samples": 2000,
+      "positives": 305,
+      "threshold": 0.5,
+      "confusion_matrix": [
+        [
+          0,
+          1695
+        ],
+        [
+          0,
+          305
+        ]
+      ],
+      "precision": 0.1525,
+      "recall": 1.0,
+      "f2": 0.47360248447204967,
+      "false_alarm_rate": 1.0,
+      "miss_rate": 0.0,
+      "average_precision": 0.1525,
+      "roc_auc": 0.5,
+      "illustrative_cost_fp1_fn10": 1695,
+      "accuracy": 0.1525
+    }
+  }
+}

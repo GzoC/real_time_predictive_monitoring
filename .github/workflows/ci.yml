@@ -26,6 +26,10 @@ jobs:
       - run: uv run --no-sync ruff format --check src tests scripts
       - run: uv run --no-sync pytest --cov=predictive_monitor --cov-report=term-missing
       - run: uv run --no-sync condition-monitor train
+      - name: Reproduce historical leakage study from pinned source
+        run: |
+          curl --fail --location --retry 3 https://raw.githubusercontent.com/GzoC/predictive_maintenance_01/c69f8024fd1f014f7f2de591f5594cc21b14a69d/data/raw/machine_data.csv --output var/legacy-maintenance.csv
+          uv run --no-sync python scripts/audit_legacy_maintenance.py --legacy-csv var/legacy-maintenance.csv --output var/legacy-audit.json
       - run: uv run --no-sync python scripts/check_notebook.py
       - run: uv build
       - name: Install and run wheel outside source tree
@@ -42,6 +46,7 @@ jobs:
           path: |
             var/model/manifest.json
             var/model/baseline-rules.txt
+            var/legacy-audit.json
             dist/*
   container:
     runs-on: ubuntu-latest
