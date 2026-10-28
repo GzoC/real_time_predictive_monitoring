@@ -6,6 +6,8 @@ import pandas as pd
 import requests
 import streamlit as st
 
+from predictive_monitor.charts import telemetry_chart
+
 API_URL = os.environ.get("API_URL", "http://127.0.0.1:8000").rstrip("/")
 
 
@@ -24,10 +26,10 @@ def render():
         st.header("Estación de monitoreo")
         asset = st.text_input("Activo", "DEMO-01", max_chars=40)
         st.caption("La señal se considera vencida después de 5 segundos sin una medición nueva.")
-        st.button("Recargar conexión", use_container_width=True)
+        st.button("Recargar conexión", width="stretch")
         st.divider()
         st.markdown("**Iniciar el ciclo de demostración**")
-        st.code("condition-monitor simulate --steps 80", language="bash")
+        st.code("condition-monitor simulate --steps 80", language="bash", wrap_lines=True)
         st.caption(
             "El ciclo envía operación normal, una condición de alarma, 9 s sin señal y recuperación."
         )
@@ -48,7 +50,7 @@ def render():
             return
         events = snapshot["events"]
         a, b, c, d = st.columns(4)
-        labels = {"normal": "Normal", "alarm": "Alarma", "unknown": "Sin señal vigente"}
+        labels = {"normal": "Normal", "alarm": "Alarma", "unknown": "Sin señal"}
         a.metric("Condición actual", labels[snapshot["condition"]])
         b.metric(
             "Antigüedad",
@@ -82,21 +84,21 @@ def render():
             f"Origen: {latest['observation']['source']} · Modelo: {latest['prediction']['model_id']} · Horas UTC"
         )
         st.subheader("Puntuación y umbral de alarma")
-        st.line_chart(
-            frame.set_index("timestamp")[["score", "threshold"]], color=["#147d73", "#bc6b21"]
-        )
+        st.altair_chart(telemetry_chart(frame, ["score", "threshold"]), width="stretch")
+        st.caption("El trazo se interrumpe cuando hay más de 5 segundos entre mediciones.")
         st.caption(
             "Puntuación del clasificador sin calibración probabilística. No expresa probabilidad de fallo futuro."
         )
         left, right = st.columns(2)
         with left:
             st.subheader("Temperaturas · K")
-            st.line_chart(
-                frame.set_index("timestamp")[["air_temperature_k", "process_temperature_k"]]
+            st.altair_chart(
+                telemetry_chart(frame, ["air_temperature_k", "process_temperature_k"]),
+                width="stretch",
             )
         with right:
             st.subheader("Par · N·m")
-            st.line_chart(frame.set_index("timestamp")[["torque_nm"]])
+            st.altair_chart(telemetry_chart(frame, ["torque_nm"]), width="stretch")
         st.subheader("Registro de mediciones")
         st.dataframe(
             frame[
@@ -111,7 +113,7 @@ def render():
                 ]
             ],
             hide_index=True,
-            use_container_width=True,
+            width="stretch",
         )
         st.download_button(
             "Exportar mediciones visibles",
@@ -144,7 +146,7 @@ def render():
                         "Precisión": metric["precision"],
                     }
                 )
-            st.dataframe(pd.DataFrame(rows), hide_index=True, use_container_width=True)
+            st.dataframe(pd.DataFrame(rows), hide_index=True, width="stretch")
             st.caption(
                 "Umbral seleccionado con F2 en validación. El conjunto de prueba no ajusta el modelo ni el umbral."
             )

@@ -1,11 +1,11 @@
 # Estado de implementación
 
-Reconstrucción en curso sobre `codex/predictive-monitoring-rebuild`. La versión inicial permanece en el historial. No se declara cierre ni integración en main.
+Actualizado el 28 de octubre de 2026. La reconstrucción base fue integrada mediante [PR #8](https://github.com/GzoC/real_time_predictive_monitoring/pull/8), merge `b77db10b22d808a719e4fecf7538cdcf1c17738b`. Se conserva el historial original.
 
-Implementado: dataset trazable, pipeline persistido, comparación con baselines, API validada, SQLite idempotente, simulador de telemetría, dashboard Streamlit, configuración de paquete/lock y Docker/CI. Primer bloque local: entrenamiento ejecutado y 23 pruebas aprobadas, incluyendo igualdad directa/API, escalador ajustado solo con entrenamiento, pérdida de señal y recuperación, persistencia y conflictos.
+Esta continuación, `codex/predictive-monitoring-validation`, añade cortes de gráficos ante ausencia de señal, etiquetas UTC consistentes, adaptación de la interfaz y evidencia real de navegador. Su integración se entrega en un PR separado; no se afirma que ya esté en main.
 
-También ejecutado: notebook completo con entrenamiento, reporte y equivalencia directa/API; Ruff; construcción de wheel y sdist. El entorno local es Windows / Python 3.12.13, scikit-learn 1.9.1. La evaluación medida se conserva en reports/metrics/evaluation.json.
+Implementado y verificado: dataset trazable, pipeline único, evaluación reservada frente a baselines, contrato físico, almacenamiento idempotente, simulador HTTP, dashboard, notebook reproducible, paquetes, lock, Docker y CI. Se completó la revisión visual en Edge de escritorio y viewport móvil: flujo normal/alarma/ausencia/recuperación, selección de activo, formulario, CSV, caída y reinicio de API. Hay capturas y video reales del demostrador.
 
-Pendientes antes de entrega: verificar paquete fuera del checkout; validar navegador real, simulador por HTTP y recuperación de API; ejecutar Docker en CI; añadir capturas/video y completar el informe de validación. Revisar las pruebas adicionales necesarias tras esas comprobaciones. La interfaz y los contenedores todavía no se han validado. La cobertura inicial de todo el paquete es 59 % e incluye una interfaz aún sin probar.
+Validación local de esta continuación: 25 pruebas aprobadas, Ruff y construcción de wheel/sdist. La cobertura automatizada global es 60 %; la revisión manual de navegador no forma parte de esa cifra. El notebook, instalación fuera del checkout y contenedores se ejecutaron en la CI de la base integrada y se vuelven a comprobar por el workflow de cada PR. Consultar el estado exacto del commit en GitHub antes de integrar.
 
-La continuación detallada, cuotas y respaldos se mantienen fuera del repositorio en el registro de trabajo de esta tarea. No comenzar el repositorio de investigación de mantenimiento hasta cerrar este monitor.
+Resultados, evidencia y limitaciones: [VALIDATION.md](VALIDATION.md). No se atribuye validación en planta, predicción de fallos futuros ni aprobación operacional. Los siguientes trabajos del portafolio se registran por separado.

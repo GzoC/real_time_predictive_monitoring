@@ -6,7 +6,13 @@ Python · scikit-learn · FastAPI · Streamlit · SQLite
 
 Demostrador de clasificación de condición industrial con datos sintéticos AI4I 2020. El modelo detecta la condición de la observación; no se atribuye anticipación de fallas futuras. El nombre histórico del repositorio se conserva.
 
-**Estado:** reconstrucción en curso; ver [comprobaciones y pendientes](docs/IMPLEMENTATION_STATUS.md).
+[![Quality and reproducibility](https://github.com/GzoC/real_time_predictive_monitoring/actions/workflows/ci.yml/badge.svg)](https://github.com/GzoC/real_time_predictive_monitoring/actions/workflows/ci.yml)
+
+![Dashboard con alarma y telemetría simulada](docs/evidence/alarm.png)
+
+[Demo grabada (~49 s)](docs/evidence/walkthrough.mp4) · [Guion de demostración](docs/DEMO.md) · [Pruebas y evidencia](docs/VALIDATION.md)
+
+**Recorrido:** medición con unidades → pipeline persistido → API → SQLite → dashboard. La reconstrucción base está integrada en main; esta continuación completa gráficos, validación visual y evidencia. [Estado de entrega](docs/IMPLEMENTATION_STATUS.md).
 
 ## Ejecutar localmente
 
@@ -15,7 +21,6 @@ Con Python 3.11–3.14 y uv:
 ```bash
 git clone https://github.com/GzoC/real_time_predictive_monitoring.git
 cd real_time_predictive_monitoring
-git switch codex/predictive-monitoring-rebuild
 uv sync --locked --extra dev
 uv run --no-sync condition-monitor train
 uv run --no-sync condition-monitor serve
@@ -40,7 +45,7 @@ El ciclo incluye operación normal, condición de alarma, nueve segundos de ause
 - Un único pipeline guarda las transformaciones y el clasificador. CLI, notebook y API reciben las mismas unidades y características.
 - El umbral se elige en validación; el conjunto de prueba permanece reservado. Las etiquetas de tipos de fallo y los identificadores no entran al modelo.
 - Cada evento conserva su activo, hora UTC, origen declarado, puntuación y versión del modelo. Los reenvíos no duplican una medición retenida.
-- La pérdida de señal produce estado desconocido. El dashboard muestra la antigüedad, las alarmas y los valores fuera del rango de entrenamiento.
+- La pérdida de señal produce estado desconocido. El dashboard muestra la antigüedad, las alarmas y los valores fuera del rango de entrenamiento; corta los trazos cuando faltan más de cinco segundos de señal.
 - Dependencias bloqueadas, paquete instalable y configuración Docker que instala el código sin montajes del checkout.
 
 ## Resultado medido
@@ -61,7 +66,7 @@ La mejora consiste en menos falsas alarmas con una detección ligeramente menor 
 docker compose --profile demo up --build -d --wait
 ```
 
-API en 8000, dashboard en 8501, ambos publicados solo en loopback. El simulador termina después de 120 mediciones de reloj; las fases sin señal no envían eventos. Para repetir: `docker compose run --rm simulator`. El dashboard usa el nombre de servicio `api`, no localhost, para comunicarse dentro de Compose. La validación de contenedores está pendiente hasta que la CI lo confirme.
+API en 8000, dashboard en 8501, ambos publicados solo en loopback. El simulador termina después de 120 pasos de reloj; las fases sin señal no envían eventos. Para repetir: `docker compose run --rm simulator`. El dashboard usa el nombre de servicio `api`, no localhost, para comunicarse dentro de Compose. GitHub Actions comprueba la construcción real, salud de servicios e ingestión HTTP; [alcance y ejecuciones](docs/VALIDATION.md).
 
 ## Reproducir la evaluación
 
@@ -80,6 +85,8 @@ El entrenamiento genera `var/model/pipeline.joblib`, un manifiesto JSON con hash
 - [Procedencia y licencia de datos](data/README.md)
 - [Modelo, evaluación y límites](docs/MODEL_CARD.md)
 - [Migración e historial preservado](docs/MIGRATION.md)
+- [Demo de dos minutos y decisiones de diseño](docs/DEMO.md)
+- [Validación, capturas y alcance de las pruebas](docs/VALIDATION.md)
 - [Estado de validación](docs/IMPLEMENTATION_STATUS.md)
 
 English: Reproducible industrial current-condition classification with a persisted preprocessing pipeline, held-out evaluation and a live synthetic telemetry demonstration. No future failure horizon or factory deployment is claimed.

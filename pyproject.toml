@@ -13,7 +13,7 @@ authors = [{name = "GzoC"}]
 dependencies = [
   "numpy>=2,<3", "pandas>=2.2,<3", "scikit-learn>=1.7,<1.10", "joblib>=1.4,<2",
   "fastapi>=0.115,<1", "pydantic>=2.10,<3", "uvicorn>=0.34,<1",
-  "streamlit>=1.50,<2", "requests>=2.32,<3",
+  "streamlit>=1.50,<2", "requests>=2.32,<3", "altair>=5.5,<7",
 ]
 
 [project.optional-dependencies]
