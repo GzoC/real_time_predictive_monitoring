@@ -1,0 +1,571 @@
+{
+  "captured_at_utc": "2026-10-28",
+  "source": "36 actual Edge viewport captures, synthetic HTTP telemetry; no generated UI",
+  "capture_span_seconds": 48.216,
+  "encoding": "H264, 25 fps repeating captured frames, original wall-clock intervals; last frame held 1 s",
+  "video_sha256": "2f949076f32e1559c60a40a4f0210bc48f23f39a2bff60c65ca766e004467f73",
+  "selected_frames": {
+    "normal.png": {
+      "file": "frame-0006.png",
+      "time": 1793187719324,
+      "status": [
+        "CondiciÃ³n actual",
+        "Normal",
+        "AntigÃ¼edad",
+        "0.3 s",
+        "Muestras en vista",
+        "7",
+        "Alarmas en vista",
+        "0"
+      ]
+    },
+    "alarm.png": {
+      "file": "frame-0012.png",
+      "time": 1793187732581,
+      "status": [
+        "CondiciÃ³n actual",
+        "Alarma",
+        "AntigÃ¼edad",
+        "1.1 s",
+        "Muestras en vista",
+        "15",
+        "Alarmas en vista",
+        "5"
+      ]
+    },
+    "signal-loss.png": {
+      "file": "frame-0023.png",
+      "time": 1793187745547,
+      "status": [
+        "CondiciÃ³n actual",
+        "Sin seÃ±al",
+        "AntigÃ¼edad",
+        "7.8 s",
+        "Muestras en vista",
+        "20",
+        "Alarmas en vista",
+        "10"
+      ]
+    },
+    "recovery.png": {
+      "file": "frame-0035.png",
+      "time": 1793187761681,
+      "status": [
+        "CondiciÃ³n actual",
+        "Normal",
+        "AntigÃ¼edad",
+        "1.1 s",
+        "Muestras en vista",
+        "31",
+        "Alarmas en vista",
+        "10"
+      ]
+    }
+  },
+  "frames": [
+    {
+      "file": "frame-0000.png",
+      "time": 1793187713465,
+      "status": [
+        "CondiciÃ³n actual",
+        "Normal",
+        "AntigÃ¼edad",
+        "1.6 s",
+        "Muestras en vista",
+        "3",
+        "Alarmas en vista",
+        "0"
+      ]
+    },
+    {
+      "file": "frame-0001.png",
+      "time": 1793187714766,
+      "status": [
+        "CondiciÃ³n actual",
+        "Normal",
+        "AntigÃ¼edad",
+        "1.8 s",
+        "Muestras en vista",
+        "3",
+        "Alarmas en vista",
+        "0"
+      ]
+    },
+    {
+      "file": "frame-0002.png",
+      "time": 1793187715758,
+      "status": [
+        "CondiciÃ³n actual",
+        "Normal",
+        "AntigÃ¼edad",
+        "2.5 s",
+        "Muestras en vista",
+        "3",
+        "Alarmas en vista",
+        "0"
+      ]
+    },
+    {
+      "file": "frame-0003.png",
+      "time": 1793187716346,
+      "status": [
+        "CondiciÃ³n actual",
+        "Normal",
+        "AntigÃ¼edad",
+        "2.1 s",
+        "Muestras en vista",
+        "4",
+        "Alarmas en vista",
+        "0"
+      ]
+    },
+    {
+      "file": "frame-0004.png",
+      "time": 1793187717414,
+      "status": [
+        "CondiciÃ³n actual",
+        "Normal",
+        "AntigÃ¼edad",
+        "2.1 s",
+        "Muestras en vista",
+        "4",
+        "Alarmas en vista",
+        "0"
+      ]
+    },
+    {
+      "file": "frame-0005.png",
+      "time": 1793187718445,
+      "status": [
+        "CondiciÃ³n actual",
+        "Normal",
+        "AntigÃ¼edad",
+        "0.4 s",
+        "Muestras en vista",
+        "6",
+        "Alarmas en vista",
+        "0"
+      ]
+    },
+    {
+      "file": "frame-0006.png",
+      "time": 1793187719324,
+      "status": [
+        "CondiciÃ³n actual",
+        "Normal",
+        "AntigÃ¼edad",
+        "0.3 s",
+        "Muestras en vista",
+        "7",
+        "Alarmas en vista",
+        "0"
+      ]
+    },
+    {
+      "file": "frame-0007.png",
+      "time": 1793187720361,
+      "status": [
+        "CondiciÃ³n actual",
+        "Normal",
+        "AntigÃ¼edad",
+        "0.2 s",
+        "Muestras en vista",
+        "8",
+        "Alarmas en vista",
+        "0"
+      ]
+    },
+    {
+      "file": "frame-0008.png",
+      "time": 1793187721327,
+      "status": [
+        "CondiciÃ³n actual",
+        "Normal",
+        "AntigÃ¼edad",
+        "0.2 s",
+        "Muestras en vista",
+        "9",
+        "Alarmas en vista",
+        "0"
+      ]
+    },
+    {
+      "file": "frame-0009.png",
+      "time": 1793187722319,
+      "status": [
+        "CondiciÃ³n actual",
+        "Normal",
+        "AntigÃ¼edad",
+        "0.2 s",
+        "Muestras en vista",
+        "10",
+        "Alarmas en vista",
+        "0"
+      ]
+    },
+    {
+      "file": "frame-0010.png",
+      "time": 1793187724741,
+      "status": [
+        "CondiciÃ³n actual",
+        "Normal",
+        "AntigÃ¼edad",
+        "1.2 s",
+        "Muestras en vista",
+        "10",
+        "Alarmas en vista",
+        "0"
+      ]
+    },
+    {
+      "file": "frame-0011.png",
+      "time": 1793187725328,
+      "status": [
+        "CondiciÃ³n actual",
+        "Normal",
+        "AntigÃ¼edad",
+        "1.2 s",
+        "Muestras en vista",
+        "10",
+        "Alarmas en vista",
+        "0"
+      ]
+    },
+    {
+      "file": "frame-0012.png",
+      "time": 1793187732581,
+      "status": [
+        "CondiciÃ³n actual",
+        "Alarma",
+        "AntigÃ¼edad",
+        "1.1 s",
+        "Muestras en vista",
+        "15",
+        "Alarmas en vista",
+        "5"
+      ]
+    },
+    {
+      "file": "frame-0013.png",
+      "time": 1793187734816,
+      "status": [
+        "CondiciÃ³n actual",
+        "Alarma",
+        "AntigÃ¼edad",
+        "0.7 s",
+        "Muestras en vista",
+        "16",
+        "Alarmas en vista",
+        "6"
+      ]
+    },
+    {
+      "file": "frame-0014.png",
+      "time": 1793187734951,
+      "status": [
+        "CondiciÃ³n actual",
+        "Alarma",
+        "AntigÃ¼edad",
+        "0.8 s",
+        "Muestras en vista",
+        "18",
+        "Alarmas en vista",
+        "8"
+      ]
+    },
+    {
+      "file": "frame-0015.png",
+      "time": 1793187736070,
+      "status": [
+        "CondiciÃ³n actual",
+        "Alarma",
+        "AntigÃ¼edad",
+        "1.6 s",
+        "Muestras en vista",
+        "18",
+        "Alarmas en vista",
+        "8"
+      ]
+    },
+    {
+      "file": "frame-0016.png",
+      "time": 1793187736980,
+      "status": [
+        "CondiciÃ³n actual",
+        "Alarma",
+        "AntigÃ¼edad",
+        "0.5 s",
+        "Muestras en vista",
+        "19",
+        "Alarmas en vista",
+        "9"
+      ]
+    },
+    {
+      "file": "frame-0017.png",
+      "time": 1793187740416,
+      "status": [
+        "CondiciÃ³n actual",
+        "Alarma",
+        "AntigÃ¼edad",
+        "1.6 s",
+        "Muestras en vista",
+        "19",
+        "Alarmas en vista",
+        "9"
+      ]
+    },
+    {
+      "file": "frame-0018.png",
+      "time": 1793187740776,
+      "status": [
+        "CondiciÃ³n actual",
+        "Alarma",
+        "AntigÃ¼edad",
+        "0.8 s",
+        "Muestras en vista",
+        "20",
+        "Alarmas en vista",
+        "10"
+      ]
+    },
+    {
+      "file": "frame-0019.png",
+      "time": 1793187741688,
+      "status": [
+        "CondiciÃ³n actual",
+        "Alarma",
+        "AntigÃ¼edad",
+        "3.4 s",
+        "Muestras en vista",
+        "20",
+        "Alarmas en vista",
+        "10"
+      ]
+    },
+    {
+      "file": "frame-0020.png",
+      "time": 1793187742553,
+      "status": [
+        "CondiciÃ³n actual",
+        "Alarma",
+        "AntigÃ¼edad",
+        "3.4 s",
+        "Muestras en vista",
+        "20",
+        "Alarmas en vista",
+        "10"
+      ]
+    },
+    {
+      "file": "frame-0021.png",
+      "time": 1793187743548,
+      "status": [
+        "CondiciÃ³n actual",
+        "Sin seÃ±al",
+        "AntigÃ¼edad",
+        "5.9 s",
+        "Muestras en vista",
+        "20",
+        "Alarmas en vista",
+        "10"
+      ]
+    },
+    {
+      "file": "frame-0022.png",
+      "time": 1793187744542,
+      "status": [
+        "CondiciÃ³n actual",
+        "Sin seÃ±al",
+        "AntigÃ¼edad",
+        "6.8 s",
+        "Muestras en vista",
+        "20",
+        "Alarmas en vista",
+        "10"
+      ]
+    },
+    {
+      "file": "frame-0023.png",
+      "time": 1793187745547,
+      "status": [
+        "CondiciÃ³n actual",
+        "Sin seÃ±al",
+        "AntigÃ¼edad",
+        "7.8 s",
+        "Muestras en vista",
+        "20",
+        "Alarmas en vista",
+        "10"
+      ]
+    },
+    {
+      "file": "frame-0024.png",
+      "time": 1793187750677,
+      "status": [
+        "CondiciÃ³n actual",
+        "Normal",
+        "AntigÃ¼edad",
+        "1.0 s",
+        "Muestras en vista",
+        "22",
+        "Alarmas en vista",
+        "10"
+      ]
+    },
+    {
+      "file": "frame-0025.png",
+      "time": 1793187751612,
+      "status": [
+        "CondiciÃ³n actual",
+        "Normal",
+        "AntigÃ¼edad",
+        "0.6 s",
+        "Muestras en vista",
+        "23",
+        "Alarmas en vista",
+        "10"
+      ]
+    },
+    {
+      "file": "frame-0026.png",
+      "time": 1793187752659,
+      "status": [
+        "CondiciÃ³n actual",
+        "Normal",
+        "AntigÃ¼edad",
+        "0.4 s",
+        "Muestras en vista",
+        "24",
+        "Alarmas en vista",
+        "10"
+      ]
+    },
+    {
+      "file": "frame-0027.png",
+      "time": 1793187753609,
+      "status": [
+        "CondiciÃ³n actual",
+        "Normal",
+        "AntigÃ¼edad",
+        "1.4 s",
+        "Muestras en vista",
+        "24",
+        "Alarmas en vista",
+        "10"
+      ]
+    },
+    {
+      "file": "frame-0028.png",
+      "time": 1793187754661,
+      "status": [
+        "CondiciÃ³n actual",
+        "Normal",
+        "AntigÃ¼edad",
+        "1.4 s",
+        "Muestras en vista",
+        "25",
+        "Alarmas en vista",
+        "10"
+      ]
+    },
+    {
+      "file": "frame-0029.png",
+      "time": 1793187755639,
+      "status": [
+        "CondiciÃ³n actual",
+        "Normal",
+        "AntigÃ¼edad",
+        "0.3 s",
+        "Muestras en vista",
+        "26",
+        "Alarmas en vista",
+        "10"
+      ]
+    },
+    {
+      "file": "frame-0030.png",
+      "time": 1793187756635,
+      "status": [
+        "CondiciÃ³n actual",
+        "Normal",
+        "AntigÃ¼edad",
+        "0.2 s",
+        "Muestras en vista",
+        "27",
+        "Alarmas en vista",
+        "10"
+      ]
+    },
+    {
+      "file": "frame-0031.png",
+      "time": 1793187757659,
+      "status": [
+        "CondiciÃ³n actual",
+        "Normal",
+        "AntigÃ¼edad",
+        "0.2 s",
+        "Muestras en vista",
+        "28",
+        "Alarmas en vista",
+        "10"
+      ]
+    },
+    {
+      "file": "frame-0032.png",
+      "time": 1793187758656,
+      "status": [
+        "CondiciÃ³n actual",
+        "Normal",
+        "AntigÃ¼edad",
+        "0.2 s",
+        "Muestras en vista",
+        "29",
+        "Alarmas en vista",
+        "10"
+      ]
+    },
+    {
+      "file": "frame-0033.png",
+      "time": 1793187759647,
+      "status": [
+        "CondiciÃ³n actual",
+        "Normal",
+        "AntigÃ¼edad",
+        "0.2 s",
+        "Muestras en vista",
+        "30",
+        "Alarmas en vista",
+        "10"
+      ]
+    },
+    {
+      "file": "frame-0034.png",
+      "time": 1793187760668,
+      "status": [
+        "CondiciÃ³n actual",
+        "Normal",
+        "AntigÃ¼edad",
+        "0.1 s",
+        "Muestras en vista",
+        "31",
+        "Alarmas en vista",
+        "10"
+      ]
+    },
+    {
+      "file": "frame-0035.png",
+      "time": 1793187761681,
+      "status": [
+        "CondiciÃ³n actual",
+        "Normal",
+        "AntigÃ¼edad",
+        "1.1 s",
+        "Muestras en vista",
+        "31",
+        "Alarmas en vista",
+        "10"
+      ]
+    }
+  ]
+}

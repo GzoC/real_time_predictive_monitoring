@@ -3,7 +3,9 @@
 altair==6.3.0 \
     --hash=sha256:7defb6ca730676dfc99a299768e2769f51585fcb3dc960ea71aacc368929d65e \
     --hash=sha256:fa632121aca6d0fcb198a3d8a9f7d937fa5b7518ec947951cfffb44e736d97c8
-    # via streamlit
+    # via
+    #   industrial-condition-monitor
+    #   streamlit
 annotated-doc==0.0.5 \
     --hash=sha256:117bac03a25ede5df5440e855b32d556049ca169ead221505badf432fed4b101 \
     --hash=sha256:c7e58ce09192557605d8bbd92836d7e1d520ac9580096042c0bfd197efacf1bb
