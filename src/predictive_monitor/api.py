@@ -10,7 +10,7 @@ from fastapi import FastAPI, HTTPException
 from fastapi.responses import JSONResponse
 
 from .inference import Predictor
-from .schema import Observation, TelemetryEvent
+from .schema import DraftReview, Observation, TelemetryEvent
 from .storage import ConflictError, Store
 
 logger = logging.getLogger(__name__)
@@ -83,5 +83,18 @@ def create_app(model_dir=None, db_path=None):
     @app.get("/assets/{asset_id}/snapshot")
     def snapshot(asset_id: str):
         return ready()[1].snapshot(asset_id)
+
+    @app.get("/assets/{asset_id}/drafts")
+    def drafts(asset_id: str):
+        return {"drafts": ready()[1].drafts(asset_id)}
+
+    @app.post("/drafts/{draft_id}/review")
+    def review(draft_id: str, body: DraftReview):
+        try:
+            return ready()[1].review(draft_id, body)
+        except KeyError as exc:
+            raise HTTPException(404, "Draft not found") from exc
+        except ConflictError as exc:
+            raise HTTPException(409, str(exc)) from exc
 
     return app

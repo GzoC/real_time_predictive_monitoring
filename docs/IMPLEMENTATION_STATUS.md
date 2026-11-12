@@ -1,3 +1,13 @@
+# Entrega de mantenimiento local · 12 noviembre 2026
+
+Base `9fc2fb1`, rama `codex/traceable-maintenance-demo`. Se conservaron modelo, entrenamiento, evaluación, datos, interfaces existentes e historial.
+
+Se añadieron calidad explícita, episodios persistentes, confirmación/recuperación, borradores únicos y revisión con historial y control de concurrencia. README inglés/español enlazados. Matriz por requisito en [MAINTENANCE.md](MAINTENANCE.md).
+
+Comprobaciones de esta sesión: baseline 27 pruebas; ampliación 31 pruebas; Ruff; entrenamiento real con métricas sin cambios; replay de mantenimiento; wheel/sdist; Chromium real en alarma, revisión, ausencia y recuperación. No se atribuye una ejecución local de contenedores ni del notebook en esta ampliación hasta que conste en evidencia adicional. Los workflows conservan esas comprobaciones y añaden el replay.
+
+## Registro histórico preservado
+
 # Estado de implementación
 
 Actualizado el 28 de octubre de 2026. La reconstrucción base fue integrada mediante [PR #8](https://github.com/GzoC/real_time_predictive_monitoring/pull/8), merge `b77db10b22d808a719e4fecf7538cdcf1c17738b`. Se conserva el historial original.
