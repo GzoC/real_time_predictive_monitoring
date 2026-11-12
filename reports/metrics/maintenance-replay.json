@@ -1,0 +1,51 @@
+{
+  "mode": "offline logical-clock replay, synthetic measurements",
+  "model_id": "877e31580c75b086",
+  "replays": 10,
+  "logical_measurements": 7,
+  "drafts": 2,
+  "signal_loss_condition": "unknown",
+  "review": {
+    "draft_id": "draft-7a896e4b63a34a95b6c61016c8217f4f",
+    "status": "approved",
+    "revision": 1,
+    "external_dispatch": false
+  },
+  "events": [
+    {
+      "event_id": "replay:0",
+      "condition": "normal",
+      "episode_id": null
+    },
+    {
+      "event_id": "replay:1",
+      "condition": "alarm",
+      "episode_id": null
+    },
+    {
+      "event_id": "replay:2",
+      "condition": "alarm",
+      "episode_id": "b825d28259444221b515267ecade7967"
+    },
+    {
+      "event_id": "replay:3",
+      "condition": "normal",
+      "episode_id": "b825d28259444221b515267ecade7967"
+    },
+    {
+      "event_id": "replay:4",
+      "condition": "normal",
+      "episode_id": null
+    },
+    {
+      "event_id": "replay:5",
+      "condition": "alarm",
+      "episode_id": null
+    },
+    {
+      "event_id": "replay:6",
+      "condition": "alarm",
+      "episode_id": "7a896e4b63a34a95b6c61016c8217f4f"
+    }
+  ]
+}

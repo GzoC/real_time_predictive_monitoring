@@ -1,3 +1,17 @@
+# Demo actual: 2–3 minutos
+
+1. **0:00–0:30:** con modelo entrenado, API y dashboard iniciados según README, ejecuta `uv run --no-sync condition-monitor simulate --steps 80`. Explica que son datos sintéticos y clasificación presente.
+2. **0:30–1:00:** observa normal → alarma; el episodio requiere dos muestras y genera un borrador. En Mantenimiento local revisa activo, dos mediciones, unidades, puntuación y modelo.
+3. **1:00–1:40:** durante los nueve segundos sin señal, Monitoreo muestra desconocido; el episodio persiste. Dos normales cierran el episodio. La revisión permanece independiente.
+4. **1:40–2:20:** registra responsable, decisión y motivo. Recarga y muestra historial. Explica unicidad por evento/episodio y conflicto de revisión 409; no sale ninguna orden del equipo.
+5. **2:20–2:50:** abre Evaluación: detectados, omitidos y falsas alarmas frente a reglas. Concluye indicando límites del dataset, retención y ausencia de horizonte futuro.
+
+Prueba rápida sin servicios: `uv run --no-sync python scripts/maintenance_demo.py`. Capturas nuevas: maintenance-alarm, maintenance-gap, maintenance-recovery y maintenance-review en docs/evidence. Capturadas en Chromium; el manifiesto contiene versión y observaciones.
+
+---
+
+## Registro del guion anterior
+
 # Demostración de dos minutos
 
 ## Preparación

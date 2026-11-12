@@ -1,0 +1,12 @@
+{
+  "time": "2026-11-12T13:11:28.603Z",
+  "browser": "156.0.8078.79",
+  "checks": [
+    "alarm",
+    "draft evidence",
+    "human review persisted",
+    "signal loss",
+    "recovery"
+  ],
+  "pageErrors": []
+}

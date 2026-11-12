@@ -36,6 +36,7 @@ class TelemetryEvent(Observation):
     asset_id: str = Field(min_length=1, max_length=40, pattern=r"^[a-zA-Z0-9_-]+$")
     timestamp: datetime
     source: Literal["synthetic", "external"] = "external"
+    quality: Literal["good", "bad", "uncertain"] = "good"
 
     @field_validator("timestamp")
     @classmethod
@@ -43,3 +44,11 @@ class TelemetryEvent(Observation):
         if value.tzinfo is None or value.utcoffset() is None:
             raise ValueError("timestamp must include its UTC offset")
         return value.astimezone(UTC)
+
+
+class DraftReview(BaseModel):
+    model_config = ConfigDict(extra="forbid", str_strip_whitespace=True)
+    status: Literal["draft", "approved", "rejected"]
+    reviewer: str = Field(min_length=1, max_length=80)
+    note: str = Field(min_length=1, max_length=1000)
+    expected_revision: int = Field(ge=0, strict=True)

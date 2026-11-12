@@ -193,3 +193,30 @@ def test_simulation_has_real_gap_and_reproducible_recovery():
     assert measurement(0) != measurement(10)
     assert all(measurement(i) is None for i in range(20, 29))
     assert measurement(29) is not None
+
+
+def test_maintenance_http_real_model_and_review(client):
+    now = datetime.now(UTC) - timedelta(seconds=2)
+    for i in range(2):
+        body = event(i, now + timedelta(seconds=i), **measurement(i, "alarm")).model_dump(
+            mode="json"
+        )
+        response = client.post("/events", json=body)
+        assert response.status_code == 200
+        for _ in range(10):
+            assert client.post("/events", json=body).json()["duplicate"]
+    drafts = client.get("/assets/DEMO-01/drafts").json()["drafts"]
+    assert len(drafts) == 1
+    draft = drafts[0]
+    assert draft["evidence"]["preceding_measurement"]["event_id"] == "test:0"
+    body = {
+        "status": "approved",
+        "reviewer": "Gonzalo",
+        "note": "Demo review",
+        "expected_revision": 0,
+    }
+    url = f"/drafts/{draft['draft_id']}/review"
+    assert client.post(url, json=body).json()["external_dispatch"] is False
+    assert client.post(url, json=body).status_code == 409
+    assert client.post(url, json={**body, "reviewer": " "}).status_code == 422
+    assert client.post("/drafts/missing/review", json=body).status_code == 404

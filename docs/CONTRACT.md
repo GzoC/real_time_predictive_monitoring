@@ -10,4 +10,15 @@ La respuesta incluye `condition` (normal/alarm), `score`, `threshold`, `model_id
 
 `GET /health` devuelve 200 cuando el modelo y el almacenamiento están disponibles; de lo contrario 503. `GET /model` devuelve el manifiesto de evaluación. Las entradas inválidas producen 422; un error de inferencia inesperado no se transforma en una respuesta 200 con un supuesto resultado.
 
-La API no requiere autenticación en este demostrador. Los ejemplos y Compose publican puertos en loopback. La fuente synthetic/external es una declaración del emisor, no una identidad autenticada. No hay automatización de mantenimiento ni notificación externa. Para exponer la API en una red hacen falta autenticación, TLS y controles operacionales.
+La API no requiere autenticación en este demostrador. Los ejemplos y Compose publican puertos en loopback. La fuente synthetic/external es una declaración del emisor, no una identidad autenticada. Existe un adaptador de mantenimiento local simulado; no hay notificación ni envío externo. Para exponer la API en una red hacen falta autenticación, TLS y controles operacionales.
+
+
+## Calidad, episodios y revisión (12 noviembre 2026)
+
+`POST /events` acepta `quality`: `good` (predeterminado, compatible con eventos previos), `bad`, `uncertain`. Los campos físicos siguen siendo obligatorios. Con calidad no buena se conserva el evento con `condition=invalid`, `score=null`, sin llamar al modelo; no confirma ni recupera episodios. Campos fuera del contrato reciben 422 explícito y no modifican la última medición aceptada. Un rechazo de entrada no equivale a una nueva observación del activo.
+
+La condición instantánea y el estado del episodio son distintos: puede verse `normal` mientras solo ha llegado la primera muestra de recuperación. Confirmación/recuperación requieren dos muestras consecutivas frescas (máximo 5 s de antigüedad y separación). Un hueco temporal reinicia contadores, no cierra episodios. Los borradores copian las dos mediciones de confirmación, resultado, umbral, modelo y unidades del contrato; no dependen de que el historial de mediciones se conserve.
+
+`GET /assets/{asset_id}/drafts` incluye episodio, evidencia y cambios. `POST /drafts/{draft_id}/review` recibe `{ "status": "approved", "reviewer": "Gonzalo", "note": "Motivo de revisión", "expected_revision": 0 }`; estados permitidos: `draft`, `approved`, `rejected`. Respuestas 404 (inexistente), 409 (revisión desactualizada), 422 (entrada inválida). `external_dispatch=false` siempre. La identidad del revisor es declarada; no se acredita autenticación ni cumplimiento de auditoría regulada.
+
+Migración aditiva: las tablas anteriores no se borran; los eventos antiguos se interpretan con calidad `good` al reintentar. No se crean borradores retrospectivos de alarmas históricas.

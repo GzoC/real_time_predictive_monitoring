@@ -38,7 +38,9 @@ def render():
     ):
         st.error("El activo debe usar letras, números, guion o guion bajo.")
         return
-    live, model_tab, manual = st.tabs(["Monitoreo", "Evaluación del modelo", "Medición manual"])
+    live, maintenance, model_tab, manual = st.tabs(
+        ["Monitoreo", "Mantenimiento local", "Evaluación del modelo", "Medición manual"]
+    )
 
     @st.fragment(run_every="1s")
     def live_view():
@@ -50,7 +52,12 @@ def render():
             return
         events = snapshot["events"]
         a, b, c, d = st.columns(4)
-        labels = {"normal": "Normal", "alarm": "Alarma", "unknown": "Sin señal"}
+        labels = {
+            "normal": "Normal",
+            "alarm": "Alarma",
+            "unknown": "Sin señal",
+            "invalid": "Dato no confiable",
+        }
         a.metric("Condición actual", labels[snapshot["condition"]])
         b.metric(
             "Antigüedad",
@@ -64,16 +71,38 @@ def render():
             )
         elif snapshot["condition"] == "alarm":
             st.error("El modelo detecta una condición de alarma en la última medición.")
+        elif snapshot["condition"] == "invalid":
+            st.error(
+                "Calidad de señal inválida o incierta. Medición sin inferencia; no confirma ni recupera alarmas."
+            )
         else:
             st.success("Última medición disponible: condición clasificada como normal.")
+        alarm = snapshot["alarm"]
+        if alarm and alarm["active_episode"]:
+            st.warning(
+                f"Episodio confirmado: {alarm['active_episode']} · Revisa el borrador en Mantenimiento local. Se conserva hasta dos muestras normales frescas consecutivas."
+            )
+        else:
+            st.caption(
+                "Confirmación: 2 muestras de alarma; recuperación: 2 normales. Máximo 5 s entre muestras. La pérdida de señal no cierra episodios."
+            )
         if not events:
             st.info(
                 "Inicia el simulador para ver cómo cambian la señal, los indicadores y las alarmas."
             )
             return
-        records = [{**e["observation"], **e["prediction"]} for e in events]
+        records = [{"quality": "good", **e["observation"], **e["prediction"]} for e in events]
         frame = pd.DataFrame(records)
         frame["timestamp"] = pd.to_datetime(frame["timestamp"], utc=True)
+        # Do not draw untrusted physical values as process measurements.
+        for column in [
+            "score",
+            "threshold",
+            "air_temperature_k",
+            "process_temperature_k",
+            "torque_nm",
+        ]:
+            frame.loc[frame.quality != "good", column] = float("nan")
         latest = events[-1]
         if latest["prediction"]["out_of_training_range"]:
             st.warning(
@@ -124,6 +153,92 @@ def render():
 
     with live:
         live_view()
+    with maintenance:
+        st.subheader("Medición → alarma confirmada → borrador → revisión")
+        st.info(
+            "Adaptador local simulado. Aprobar registra una revisión humana declarada; no envía órdenes ni opera equipos. No hay autenticación de revisores."
+        )
+        try:
+            drafts = fetch(f"/assets/{asset}/drafts")["drafts"]
+            if not drafts:
+                st.write(
+                    "Sin borradores para este activo. Ejecuta el simulador y recarga esta pestaña."
+                )
+            for draft in drafts:
+                with st.expander(
+                    f"{draft['status'].upper()} · {draft['draft_id']} · revisión {draft['revision']}",
+                    expanded=True,
+                ):
+                    st.write(
+                        f"Activo: {draft['asset_id']} · Creado UTC: {draft['created_at']} · Modelo: {draft['model_id']}"
+                    )
+                    st.write(
+                        "Episodio: "
+                        + ("cerrado · " + draft["closed_at"] if draft["closed_at"] else "abierto")
+                    )
+                    st.write(draft["reason"])
+                    evidence = draft["evidence"]
+                    reading = evidence["measurement"]
+                    st.dataframe(
+                        pd.DataFrame(
+                            [
+                                {
+                                    "Hora UTC": reading["timestamp"],
+                                    "Calidad": reading["quality"],
+                                    "Ambiente (K)": reading["air_temperature_k"],
+                                    "Proceso (K)": reading["process_temperature_k"],
+                                    "Velocidad (rpm)": reading["rotational_speed_rpm"],
+                                    "Par (N·m)": reading["torque_nm"],
+                                    "Desgaste (min)": reading["tool_wear_min"],
+                                    "Puntuación": evidence["prediction"]["score"],
+                                    "Umbral": evidence["prediction"]["threshold"],
+                                }
+                            ]
+                        ),
+                        hide_index=True,
+                        width="stretch",
+                    )
+                    st.json(evidence, expanded=False)
+                    st.caption(
+                        "Las mediciones y la puntuación justifican revisar el activo. No demuestran una causa física ni un fallo futuro."
+                    )
+                    st.dataframe(
+                        pd.DataFrame(draft["changes"])[
+                            [
+                                "timestamp",
+                                "reviewer",
+                                "old_status",
+                                "new_status",
+                                "note",
+                                "revision",
+                            ]
+                        ],
+                        hide_index=True,
+                        width="stretch",
+                    )
+                    with st.form("review-" + draft["draft_id"]):
+                        reviewer = st.text_input("Responsable de revisión")
+                        status = st.selectbox("Decisión", ["approved", "rejected", "draft"])
+                        note = st.text_area("Evidencia revisada y motivo")
+                        submit = st.form_submit_button("Guardar revisión local")
+                    if submit:
+                        response = requests.post(
+                            API_URL + f"/drafts/{draft['draft_id']}/review",
+                            timeout=4,
+                            json={
+                                "status": status,
+                                "reviewer": reviewer,
+                                "note": note,
+                                "expected_revision": draft["revision"],
+                            },
+                        )
+                        if response.ok:
+                            st.success("Revisión guardada. No se envió ninguna orden externa.")
+                            st.rerun()
+                        else:
+                            st.error(f"No se guardó: {response.status_code} · {response.text}")
+        except (requests.RequestException, ValueError):
+            st.error("No fue posible cargar el registro de mantenimiento.")
     with model_tab:
         try:
             metadata = fetch("/model")
